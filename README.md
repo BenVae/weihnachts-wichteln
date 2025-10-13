@@ -1,6 +1,6 @@
 # Weihnachtswichteln 🎄🎁
 
-A simple, bilingual (German/Chinese) web application for Secret Santa gift exchange.
+A simple, bilingual (German/Chinese) web application for Secret Santa gift exchange, for my family + friends and partners.
 
 ## ⚠️ WICHTIG FÜR PAUL / IMPORTANT FOR PAUL ⚠️
 
@@ -25,20 +25,6 @@ A simple, bilingual (German/Chinese) web application for Secret Santa gift excha
 3. See who you're the Secret Santa for
 4. Read the rules
 5. Click "Gemerkt!" (Got it!) to return to the input screen
-
-## Setup
-
-1. Clone this repository
-2. Edit `names.json` with your Secret Santa assignments:
-   ```json
-   {
-       "ben": "hannah",
-       "paul": "marion"
-   }
-   ```
-   The key is the Secret Santa, the value is who they gift to.
-
-3. Open `index.html` in a web browser
 
 ## Files
 

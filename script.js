@@ -37,6 +37,8 @@ const translations = {
 // State
 let currentLang = 'de';
 let secretSantaData = {};
+let currentSanta = null;
+let currentRecipient = null;
 
 // Load data
 async function loadData() {
@@ -118,6 +120,22 @@ function updateLanguage() {
     document.getElementById('rule-2').textContent = t.rule2;
     document.getElementById('rule-3').textContent = t.rule3;
 
+    // Update result section if it's visible
+    if (!document.getElementById('result-section').classList.contains('hidden')) {
+        const santa = currentSanta;
+        const recipient = currentRecipient;
+
+        if (santa && recipient) {
+            document.getElementById('greeting').textContent = t.greeting(santa);
+
+            const recipientEl = document.getElementById('recipient');
+            const capitalizedRecipient = recipient.charAt(0).toUpperCase() + recipient.slice(1);
+            recipientEl.innerHTML = `${t.recipientPrefix} <span class="recipient-name">${capitalizedRecipient}</span> ${t.recipientSuffix}`;
+
+            document.getElementById('closing').textContent = t.closing;
+        }
+    }
+
     // Update active language button
     document.querySelectorAll('.language-switcher button').forEach(btn => {
         btn.classList.remove('active');
@@ -127,6 +145,10 @@ function updateLanguage() {
 
 // Show result
 function showResult(santa, recipient) {
+    // Store current names for language switching
+    currentSanta = santa;
+    currentRecipient = recipient;
+
     const t = translations[currentLang];
 
     document.getElementById('greeting').textContent = t.greeting(santa);

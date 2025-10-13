@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weihnachtswichteln 🎄</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="language-switcher">
+        <button id="lang-de" class="active">Deutsch</button>
+        <button id="lang-zh">中文</button>
+    </div>
+
+    <div class="container">
+        <h1 id="title">Weihnachtswichteln 🎄🎁</h1>
+
+        <div id="input-section" class="section">
+            <label id="name-label" for="name-input">Dein Name:</label>
+            <input type="text" id="name-input" placeholder="Name eingeben..." autocomplete="off">
+            <button id="submit-btn">Anzeigen</button>
+            <p id="error-message" class="error"></p>
+        </div>
+
+        <div id="result-section" class="section hidden">
+            <div id="message-box" class="message-box">
+                <p id="greeting"></p>
+                <p id="recipient"></p>
+                <div id="rules">
+                    <p class="rules-title" id="rules-title">Regeln:</p>
+                    <ul>
+                        <li id="rule-1">Budget: 30€.</li>
+                        <li id="rule-2">Sag niemanden wen du gezogen hast.</li>
+                        <li id="rule-3">Äh ja so einfach ist das.</li>
+                    </ul>
+                </div>
+                <p id="closing"></p>
+            </div>
+            <button id="got-it-btn">Gemerkt!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

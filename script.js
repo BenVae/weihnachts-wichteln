@@ -7,11 +7,11 @@ const translations = {
         submitBtn: 'Anzeigen',
         gotItBtn: 'Gemerkt!',
         errorNotFound: 'Name nicht gefunden. Bitte versuche es erneut.',
-        confirmTitle: (name) => `Bist du wirklich ${name.charAt(0).toUpperCase() + name.slice(1)}? 🎅`,
+        confirmTitle: (name) => `Bist du wirklich ${displayName(name)}? 🎅`,
         confirmText: 'Nur zur Sicherheit: Wer bei anderen spickt, landet auf der Frechdachs-Liste vom Weihnachtsmann. 😉',
         confirmYes: 'Ja, das bin ich!',
         confirmNo: 'Ups, doch nicht',
-        greeting: (name) => `Hallo ${name.charAt(0).toUpperCase() + name.slice(1)},`,
+        greeting: (name) => `Hallo ${displayName(name)},`,
         recipientPrefix: 'Du beschenkst dieses Jahr',
         recipientSuffix: '',
         rulesTitle: 'Regeln',
@@ -27,11 +27,11 @@ const translations = {
         submitBtn: '显示',
         gotItBtn: '知道了！',
         errorNotFound: '未找到名字。请重试。',
-        confirmTitle: (name) => `你真的是 ${name.charAt(0).toUpperCase() + name.slice(1)} 吗？🎅`,
+        confirmTitle: (name) => `你真的是 ${displayName(name)} 吗？🎅`,
         confirmText: '温馨提示：偷看别人的名字，可是会被圣诞老人记进调皮鬼名单的哦！😉',
         confirmYes: '是的，就是我！',
         confirmNo: '哎呀，不是我',
-        greeting: (name) => `你好 ${name.charAt(0).toUpperCase() + name.slice(1)}，`,
+        greeting: (name) => `你好 ${displayName(name)}，`,
         recipientPrefix: '你今年要送礼物给',
         recipientSuffix: '',
         rulesTitle: '规则',
@@ -49,13 +49,22 @@ let currentSanta = null;
 let currentRecipient = null;
 let pendingMatch = null;
 
+// Extra spellings shown next to a name and accepted in the search
+const aliases = { kkie: '楚淇' };
+
+function displayName(name) {
+    const alias = aliases[name.toLowerCase()];
+    const capitalized = name.charAt(0).toUpperCase() + name.slice(1);
+    return alias ? `${capitalized} (${alias})` : capitalized;
+}
+
 // Load data
 async function loadData() {
     try {
         const response = await fetch('names.json');
         secretSantaData = await response.json();
         document.getElementById('name-options').append(
-            ...Object.keys(secretSantaData).map(name => new Option(name.charAt(0).toUpperCase() + name.slice(1)))
+            ...Object.keys(secretSantaData).map(name => new Option(displayName(name)))
         );
     } catch (error) {
         console.error('Error loading data:', error);
@@ -69,7 +78,8 @@ function findMatch(inputName) {
 
     // Exact match
     for (const name in secretSantaData) {
-        if (name.toLowerCase() === normalized) {
+        const spellings = [name, displayName(name), aliases[name.toLowerCase()]];
+        if (spellings.some(spelling => spelling?.toLowerCase() === normalized)) {
             return { santa: name, recipient: secretSantaData[name] };
         }
     }
@@ -144,7 +154,7 @@ function updateLanguage() {
             document.getElementById('greeting').textContent = t.greeting(santa);
 
             const recipientEl = document.getElementById('recipient');
-            const capitalizedRecipient = recipient.charAt(0).toUpperCase() + recipient.slice(1);
+            const capitalizedRecipient = displayName(recipient);
             recipientEl.innerHTML = `${t.recipientPrefix} <span class="recipient-name">${capitalizedRecipient}</span> ${t.recipientSuffix}`;
 
             document.getElementById('closing').textContent = t.closing;
@@ -170,7 +180,7 @@ function showResult(santa, recipient) {
 
     // Build recipient message with emphasized name (capitalized)
     const recipientEl = document.getElementById('recipient');
-    const capitalizedRecipient = recipient.charAt(0).toUpperCase() + recipient.slice(1);
+    const capitalizedRecipient = displayName(recipient);
     recipientEl.innerHTML = `${t.recipientPrefix} <span class="recipient-name">${capitalizedRecipient}</span> ${t.recipientSuffix}`;
 
     document.getElementById('closing').textContent = t.closing;

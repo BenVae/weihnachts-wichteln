@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weihnachtswichteln 🎄</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎁</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&display=swap">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -18,21 +21,31 @@
 
         <div id="input-section" class="section">
             <label id="name-label" for="name-input">Dein Name:</label>
-            <input type="text" id="name-input" placeholder="Name eingeben..." autocomplete="off">
+            <input type="text" id="name-input" list="name-options" placeholder="Name suchen oder auswählen..." autocomplete="off">
+            <datalist id="name-options"></datalist>
             <button id="submit-btn">Anzeigen</button>
             <p id="error-message" class="error"></p>
         </div>
+
+        <dialog id="confirm-dialog">
+            <p id="confirm-title" class="confirm-title"></p>
+            <p id="confirm-text"></p>
+            <div class="dialog-buttons">
+                <button id="confirm-yes">Ja, das bin ich!</button>
+                <button id="confirm-no" class="secondary">Ups, doch nicht</button>
+            </div>
+        </dialog>
 
         <div id="result-section" class="section hidden">
             <div id="message-box" class="message-box">
                 <p id="greeting"></p>
                 <p id="recipient"></p>
                 <div id="rules">
-                    <p class="rules-title" id="rules-title">Regeln:</p>
+                    <p class="rules-title" id="rules-title">Regeln</p>
                     <ul>
-                        <li id="rule-1">Budget: 30€.</li>
-                        <li id="rule-2">Sag niemanden wen du gezogen hast.</li>
-                        <li id="rule-3">Äh ja so einfach ist das.</li>
+                        <li id="rule-1">Die erste Regel des Wichtelns: Das Budget liegt bei 30€.</li>
+                        <li id="rule-2">Die zweite Regel des Wichtelns: Du verlierst kein Wort darüber, wen du gezogen hast.</li>
+                        <li id="rule-3">Die dritte Regel des Wichtelns: Du verlierst KEIN WORT darüber, wen du gezogen hast!</li>
                     </ul>
                 </div>
                 <p id="closing"></p>

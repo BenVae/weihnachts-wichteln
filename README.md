@@ -12,16 +12,17 @@ A simple, bilingual (German/Chinese) web application for Secret Santa gift excha
 
 ## Features
 
-- Clean, minimalistic design
+- Ugly Christmas sweater design 🧶
 - Bilingual support (German 🇩🇪 / Chinese 🇨🇳)
-- Fuzzy name matching (handles typos and case differences)
+- Searchable name dropdown, with fuzzy matching for typed names
+- "Are you really …?" confirmation before revealing the name
 - Simple, intuitive user interface
 - Mobile responsive
 
 ## How It Works
 
-1. Enter your name in the text field
-2. Click "Anzeigen" (Show) or press Enter
+1. Search or pick your name in the dropdown
+2. Click "Anzeigen" (Show) or press Enter, then confirm it's really you
 3. See who you're the Secret Santa for
 4. Read the rules
 5. Click "Gemerkt!" (Got it!) to return to the input screen
@@ -30,6 +31,7 @@ A simple, bilingual (German/Chinese) web application for Secret Santa gift excha
 
 - `index.html` - Main HTML structure
 - `styles.css` - Styling and layout
+- `sweater-band.svg`, `sweater-snow.svg` - Pixel-knit sweater patterns
 - `script.js` - Application logic and bilingual support
 - `names.json` - Secret Santa assignments (KEEP THIS SECRET!)
 

@@ -3,33 +3,41 @@ const translations = {
     de: {
         title: 'Weihnachtswichteln 🎄🎁',
         nameLabel: 'Dein Name:',
-        namePlaceholder: 'Name eingeben...',
+        namePlaceholder: 'Name suchen oder auswählen...',
         submitBtn: 'Anzeigen',
         gotItBtn: 'Gemerkt!',
         errorNotFound: 'Name nicht gefunden. Bitte versuche es erneut.',
+        confirmTitle: (name) => `Bist du wirklich ${name.charAt(0).toUpperCase() + name.slice(1)}? 🎅`,
+        confirmText: 'Nur zur Sicherheit: Wer bei anderen spickt, landet auf der Frechdachs-Liste vom Weihnachtsmann. 😉',
+        confirmYes: 'Ja, das bin ich!',
+        confirmNo: 'Ups, doch nicht',
         greeting: (name) => `Hallo ${name.charAt(0).toUpperCase() + name.slice(1)},`,
         recipientPrefix: 'Du beschenkst dieses Jahr',
         recipientSuffix: '',
-        rulesTitle: 'Regeln:',
-        rule1: 'Budget: 30€.',
-        rule2: 'Sag niemanden wen du gezogen hast.',
-        rule3: 'Äh ja so einfach ist das.',
+        rulesTitle: 'Regeln',
+        rule1: 'Die erste Regel des Wichtelns: Das Budget liegt bei 30€.',
+        rule2: 'Die zweite Regel des Wichtelns: Du verlierst kein Wort darüber, wen du gezogen hast.',
+        rule3: 'Die dritte Regel des Wichtelns: Du verlierst KEIN WORT darüber, wen du gezogen hast!',
         closing: 'Frohe Vorweihnachtszeit,\neuer Weihnachtswichtel Ben'
     },
     zh: {
         title: '圣诞礼物交换 🎄🎁',
         nameLabel: '你的名字：',
-        namePlaceholder: '输入名字...',
+        namePlaceholder: '搜索或选择名字...',
         submitBtn: '显示',
         gotItBtn: '知道了！',
         errorNotFound: '未找到名字。请重试。',
+        confirmTitle: (name) => `你真的是 ${name.charAt(0).toUpperCase() + name.slice(1)} 吗？🎅`,
+        confirmText: '温馨提示：偷看别人的名字，可是会被圣诞老人记进调皮鬼名单的哦！😉',
+        confirmYes: '是的，就是我！',
+        confirmNo: '哎呀，不是我',
         greeting: (name) => `你好 ${name.charAt(0).toUpperCase() + name.slice(1)}，`,
         recipientPrefix: '你今年要送礼物给',
         recipientSuffix: '',
-        rulesTitle: '规则：',
-        rule1: '预算：30欧元。',
-        rule2: '不要告诉任何人你抽到了谁。',
-        rule3: '嗯，就这么简单。',
+        rulesTitle: '规则',
+        rule1: '礼物交换的第一条规则：预算是30欧元。',
+        rule2: '礼物交换的第二条规则：不要告诉任何人你抽到了谁。',
+        rule3: '礼物交换的第三条规则：绝对不要告诉任何人你抽到了谁！',
         closing: '祝圣诞前快乐，\n你的圣诞小精灵 Ben'
     }
 };
@@ -39,12 +47,16 @@ let currentLang = 'de';
 let secretSantaData = {};
 let currentSanta = null;
 let currentRecipient = null;
+let pendingMatch = null;
 
 // Load data
 async function loadData() {
     try {
         const response = await fetch('names.json');
         secretSantaData = await response.json();
+        document.getElementById('name-options').append(
+            ...Object.keys(secretSantaData).map(name => new Option(name.charAt(0).toUpperCase() + name.slice(1)))
+        );
     } catch (error) {
         console.error('Error loading data:', error);
         secretSantaData = {};
@@ -115,6 +127,9 @@ function updateLanguage() {
     document.getElementById('name-input').placeholder = t.namePlaceholder;
     document.getElementById('submit-btn').textContent = t.submitBtn;
     document.getElementById('got-it-btn').textContent = t.gotItBtn;
+    document.getElementById('confirm-text').textContent = t.confirmText;
+    document.getElementById('confirm-yes').textContent = t.confirmYes;
+    document.getElementById('confirm-no').textContent = t.confirmNo;
     document.getElementById('rules-title').textContent = t.rulesTitle;
     document.getElementById('rule-1').textContent = t.rule1;
     document.getElementById('rule-2').textContent = t.rule2;
@@ -189,7 +204,10 @@ document.getElementById('submit-btn').addEventListener('click', () => {
     const match = findMatch(inputName);
 
     if (match) {
-        showResult(match.santa, match.recipient);
+        pendingMatch = match;
+        const t = translations[currentLang];
+        document.getElementById('confirm-title').textContent = t.confirmTitle(match.santa);
+        document.getElementById('confirm-dialog').showModal();
     } else {
         const t = translations[currentLang];
         document.getElementById('error-message').textContent = t.errorNotFound;
@@ -200,6 +218,17 @@ document.getElementById('name-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
         document.getElementById('submit-btn').click();
     }
+});
+
+document.getElementById('confirm-yes').addEventListener('click', () => {
+    document.getElementById('confirm-dialog').close();
+    showResult(pendingMatch.santa, pendingMatch.recipient);
+});
+
+document.getElementById('confirm-no').addEventListener('click', () => {
+    document.getElementById('confirm-dialog').close();
+    showInput();
+    document.getElementById('name-input').focus();
 });
 
 document.getElementById('got-it-btn').addEventListener('click', showInput);
